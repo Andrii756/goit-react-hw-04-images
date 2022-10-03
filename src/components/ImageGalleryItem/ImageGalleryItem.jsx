@@ -1,19 +1,21 @@
+import { ImageContainer, Image } from './ImageGalleryItem.styled';
 import PropTypes from 'prop-types';
-import css from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem({ description, smallImage, largeImage, openModal }) {
+export const ImageGalleryItem = ({ id, url, title, onImgClick }) => {
   return (
-    <li className={css.item} onClick={openModal}>
-      <img src={smallImage} alt={description} data-large={largeImage} />
-    </li>
+    <ImageContainer
+      onClick={() => {
+        onImgClick(id);
+      }}
+    >
+      <Image width="200" src={url} alt={title} />
+    </ImageContainer>
   );
-}
-
-ImageGalleryItem.prototype = {
-  description: PropTypes.string,
-  smallImage: PropTypes.string.isRequired,
-  largeImage: PropTypes.string.isRequired,
-  openModal: PropTypes.func.isRequired,
 };
 
-export default ImageGalleryItem;
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  onImgClick: PropTypes.func.isRequired,
+};

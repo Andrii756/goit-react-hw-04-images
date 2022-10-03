@@ -1,12 +1,19 @@
-import { MdOutlineCameraswitch } from 'react-icons/md';
-import css from './Loader.module.css';
+import { TailSpin } from 'react-loader-spinner';
+import { LoaderContainer } from './Loader.styled';
 
-function Loader() {
+export const Loader = () => {
   return (
-    <div className={css.wrapper}>
-      <MdOutlineCameraswitch className={css.loader} />
-    </div>
+    <LoaderContainer>
+      <TailSpin
+        height="80"
+        width="80"
+        color="#3f51b5"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    </LoaderContainer>
   );
-}
-
-export default Loader;
+};

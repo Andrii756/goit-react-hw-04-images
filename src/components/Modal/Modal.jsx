@@ -1,62 +1,41 @@
-import PropTypes from 'prop-types';
-import { Component } from 'react';
+// import React, { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { BsXLg } from 'react-icons/bs';
-import css from './Modal.module.css';
+import { Overlay, Content } from './Modal.styled';
+import PropTypes from 'prop-types';
 
-const modalRoot = document.querySelector('#modal-root');
+const modalRoot = document.getElementById('modal-root');
 
-class Modal extends Component {
-  static propTypes = {
-    title: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
-    currentImageUrl: PropTypes.string,
-    currentImageDescription: PropTypes.string,
-  };
+export default function Modal({ onClose, children }) {
+  useEffect(() => {
+    window.addEventListener('keydown', closeModal);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+    return () => {
+      window.removeEventListener('keydown', closeModal);
+    };
+  });
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleClickBackdrop = e => {
-    if (e.target === e.currentTarget) {
-      this.props.onClose();
-    }
-  };
-
-  handleKeyDown = e => {
+  const closeModal = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    const { title, onClose, currentImageUrl, currentImageDescription } =
-      this.props;
+  const closeByClick = e => {
+    if (e.currentTarget === e.target) {
+      onClose();
+    }
+  };
 
-    return createPortal(
-      <div className={css.backdrop} onClick={this.handleClickBackdrop}>
-        <div className={css.modal}>
-          <div className={css.wrapper}>
-            {title && <h1 className={css.title}>{title}</h1>}
-            <button className={css.button} type="button" onClick={onClose}>
-              <BsXLg className={css.icon} />
-            </button>
-          </div>
-          <img
-            src={currentImageUrl}
-            alt={currentImageDescription}
-            loading="lazy"
-          />
-        </div>
-      </div>,
-      modalRoot
-    );
-  }
+  return createPortal(
+    <Overlay onClick={closeByClick}>
+      <Content>{children}</Content>
+    </Overlay>,
+    modalRoot
+  );
 }
 
-export default Modal;
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};
