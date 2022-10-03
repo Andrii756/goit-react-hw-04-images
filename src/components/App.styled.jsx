@@ -5,5 +5,4 @@ export const Container = styled.div`
   grid-template-columns: 1fr;
   grid-gap: 16px;
   padding-bottom: 24px;
-  background-color: rgba(0,255,127, 0.8);
 `;
